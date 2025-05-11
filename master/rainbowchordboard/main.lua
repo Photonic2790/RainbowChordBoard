@@ -432,6 +432,7 @@ function love.draw()
 				end
 			elseif (mx < bs * 8) then -- sus2 button
 				if (chord == 1) then -- major third
+					n = root - key + 2
 					SetChordAdjustment(n,1)
 					n = n + 2
 					SetChordAdjustment(n,-1)
