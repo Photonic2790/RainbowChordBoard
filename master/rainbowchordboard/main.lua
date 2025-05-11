@@ -665,8 +665,8 @@ function love.draw()
 	love.graphics.rectangle("fill", BUTTONSIZE*13.3,0, width,height)
 	
     -- Draw the "cursor" at the mouse position.
-	love.graphics.setColor(FGCOLOR)
-	love.graphics.draw(RCB_cursor, love.mouse.getX(), love.mouse.getY())
+	love.graphics.setColor(1,1,1,1)
+	love.graphics.draw(RCB_cursor, love.mouse.getX(), love.mouse.getY(), 0, IMAGESCALE, IMAGESCALE)
 
 end
 
