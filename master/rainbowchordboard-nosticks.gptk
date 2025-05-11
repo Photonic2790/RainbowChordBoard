@@ -1,0 +1,20 @@
+a = a
+b = b
+x = x
+y = y
+
+up = up
+up = repeat
+down = down
+down = repeat
+left = left
+left = repeat
+right = right
+right = repeat
+
+back = backspace
+
+l1 = pageup
+l1 = repeat
+r1 = pagedown
+r1 = repeat

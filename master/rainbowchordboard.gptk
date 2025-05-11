@@ -1,0 +1,40 @@
+a = a
+b = b
+x = x
+y = y
+
+up = up
+up = repeat
+down = down
+down = repeat
+left = left
+left = repeat
+right = right
+right = repeat
+
+back = backspace
+
+
+l1 = pageup
+l1 = repeat
+r1 = pagedown
+r1 = repeat
+
+left_analog_up = up
+left_analog_up = repeat
+left_analog_down = down
+left_analog_down = repeat
+left_analog_left = left
+left_analog_left = repeat
+left_analog_right = right
+left_analog_right = repeat
+
+right_analog_up = pageup
+right_analog_up = repeat
+right_analog_down = pagedown
+right_analog_down = repeat
+right_analog_left = left
+right_analog_left = repeat
+right_analog_right = right
+right_analog_right = repeat
+
