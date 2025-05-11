@@ -1,20 +1,23 @@
 a = a
 b = b
+b = repeat
 x = x
+x = repeat
 y = y
+y = repeat
 
-up = up
-up = repeat
-down = down
-down = repeat
-left = left
-left = repeat
-right = right
-right = repeat
 
-back = backspace
+up = mouse_movement_up
 
-l1 = pageup
-l1 = repeat
-r1 = pagedown
-r1 = repeat
+l1 = mouse_left
+r1 = mouse_right
+
+l2 = leftctrl
+r2 = rightctrl
+
+back = enter
+
+
+deadzone_triggers = 3000
+mouse_scale = 6000
+mouse_delay = 16

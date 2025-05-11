@@ -9,9 +9,12 @@ Includes string tuning buttons for a multitude of tunings and instrument fretboa
 
 local TITLE = "Rainbow Chord Board"
 local width, height = love.window.getMode()
+love.window.setMode(width, height, {fullscreen=true, resizable=true, vsync=0, minwidth=320, minheight=240})
+width, height = love.window.getMode()
 local WINDOWWIDTH  = width
 local WINDOWHEIGHT = height
 local BUTTONSIZE = height / 10
+local IMAGESCALE = BUTTONSIZE / 48
 -- eOOOOOOOOOOOO|     -- button size(48) * 13 + small string adjustment buttons(16) = WIDTH
 -- BOOOOOOOOOOOO|
 -- GOOOOOOOOOOOO|
@@ -25,6 +28,7 @@ local BUTTONSIZE = height / 10
 -- button size(48) * 10 = height
 
 local BGCOLOR = { .6,  .55,  .45 }
+local FGCOLOR = { .6,  .55,  .45 , 1}
 
 local key = 3 -- +1 = half step, a variable to store the key. 3 = C, 0 = A, 11 = G sharp / A flat, marked with T
 local root = 3 -- when choosing chords in a key this holds the root to the current chord, marked with R
@@ -110,7 +114,7 @@ end
 function love.load()
 
     love.window.setTitle(TITLE)
-    love.window.setMode(WINDOWWIDTH, WINDOWHEIGHT, {resizable=true, vsync=0, minwidth=640, minheight=480})
+    love.window.setMode(WINDOWWIDTH, WINDOWHEIGHT, {resizable=true, vsync=0, minwidth=320, minheight=240})
     love.graphics.setBackgroundColor(BGCOLOR)
 	font = love.graphics.newFont(14)
 	
@@ -155,13 +159,16 @@ function love.load()
 end
 
 function love.draw()
-
+	width, height = love.window.getMode()
+	BUTTONSIZE = width / 13.33
+	if height < BUTTONSIZE * 10 then BUTTONSIZE = height / 10 end
+	IMAGESCALE = BUTTONSIZE / 48
 -- "[{[BUTTONS]}]" -- 
 -- in a standard program this would be a function, on a page after a menu perhaps
 -- but this is just a static button board one screen mode application, so I choose to simply write it all here in draw()
 	mx, my = love.mouse.getPosition()
 	mdelay = mdelay + 1 
-	local bs = 48 -- button size (same as image size)
+	local bs = BUTTONSIZE -- 48 -- button size (same as image size)
     if (mdelay >= 20) and (love.mouse.isDown(1) or love.mouse.isDown(2) or love.mouse.isDown(3)) then
 		mdelay = 0
 		if (DialogWindow ~= 0) then DialogWindow = 0 -- disables all buttons (even close) while a dialog is open
@@ -482,7 +489,7 @@ function love.draw()
 	
 	stringOffset = 1
 	-- Main Rainbow Chord Board Drawing Loop
-		-- todo, clean this up to use vars for differing screen resolutions, eg button size = 48, add scaling to draw...
+	love.graphics.setColor(1, 1, 1, 1)
 	if (DialogWindow == 0) then
 	for i = 0, 5 do -- a loop through for each string, the "vertical" loop, i moves along Y
 		if (i == 0) then -- high e
@@ -501,69 +508,69 @@ function love.draw()
 		
 		for c = 0, 12 do -- the "horizontal" note drawing loop, c moves along X	
 			if (stringOffset == -1) then
-				love.graphics.draw(hbmGray, c*48, i*48)
+				love.graphics.draw(hbmGray, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawFirst == 1 and (c == (key - stringOffset) or c == (key - stringOffset + 12) or c == (key - stringOffset - 12))) then
-				love.graphics.draw(hbmRed, c*48, i*48)
+				love.graphics.draw(hbmRed, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawSecond == 1 and (c == (1 + key - stringOffset) or c == (1 + key - stringOffset + 12) or c == (1 + key - stringOffset - 12))) then
-				love.graphics.draw(hbmRedOrange, c*48, i*48)
+				love.graphics.draw(hbmRedOrange, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawThird == 1 and (c == (2 + key - stringOffset) or c == (2 + key - stringOffset + 12) or c == (2 + key - stringOffset - 12))) then
-				love.graphics.draw(hbmOrange, c*48, i*48)
+				love.graphics.draw(hbmOrange, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawFourth == 1 and (c == (3 + key - stringOffset) or c == (3 + key - stringOffset + 12) or c == (3 + key - stringOffset - 12))) then
 				if (DrawMajMin == 1) then
-					love.graphics.draw(hbmOrangeYellow, c*48, i*48)
+					love.graphics.draw(hbmOrangeYellow, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				else
-					love.graphics.draw(hbmYellow, c*48, i*48)
+					love.graphics.draw(hbmYellow, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 			elseif (DrawFifth == 1 and (c == (4 + key - stringOffset) or c == (4 + key - stringOffset + 12) or c == (4 + key - stringOffset - 12))) then
 				if (DrawMajMin == 1) then
-					love.graphics.draw(hbmYellow, c*48, i*48)
+					love.graphics.draw(hbmYellow, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				else
-					love.graphics.draw(hbmYellowGreen, c*48, i*48)
+					love.graphics.draw(hbmYellowGreen, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end				
 			elseif (DrawSixth == 1 and (c == (5 + key - stringOffset) or c == (5 + key - stringOffset + 12) or c == (5 + key - stringOffset - 12))) then
-				love.graphics.draw(hbmGreen, c*48, i*48)
+				love.graphics.draw(hbmGreen, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawSeventh == 1 and (c == (6 + key - stringOffset) or c == (6 + key - stringOffset + 12) or c == (6 + key - stringOffset - 12))) then
-				love.graphics.draw(hbmGreenBlue, c*48, i*48)
+				love.graphics.draw(hbmGreenBlue, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawEighth == 1 and (c == (7 + key - stringOffset) or c == (7 + key - stringOffset + 12) or c == (7 + key - stringOffset - 12))) then
-				love.graphics.draw(hbmBlue, c*48, i*48)
+				love.graphics.draw(hbmBlue, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			elseif (DrawNinth == 1 and (c == (8 + key - stringOffset) or c == (8 + key - stringOffset + 12) or c == (8 + key - stringOffset - 12))) then
 				if (DrawMajMin == 1) then
-					love.graphics.draw(hbmBlueIndigo, c*48, i*48)
+					love.graphics.draw(hbmBlueIndigo, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				else
-					love.graphics.draw(hbmIndigo, c*48, i*48)
+					love.graphics.draw(hbmIndigo, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 			elseif (DrawTenth == 1 and (c == (9 + key - stringOffset) or c == (9 + key - stringOffset + 12) or c == (9 + key - stringOffset - 12))) then
 				if (DrawMajMin == 1) then
-					love.graphics.draw(hbmIndigo, c*48, i*48)
+					love.graphics.draw(hbmIndigo, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				else
-					love.graphics.draw(hbmIndigoViolet, c*48, i*48)
+					love.graphics.draw(hbmIndigoViolet, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 			elseif (DrawEleventh == 1 and (c == (10 + key - stringOffset) or c == (10 + key - stringOffset + 12) or c == (10 + key - stringOffset - 12))) then
 				if (DrawMajMin == 1) then
-					love.graphics.draw(hbmIndigoViolet, c*48, i*48)
+					love.graphics.draw(hbmIndigoViolet, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				else
-					love.graphics.draw(hbmViolet, c*48, i*48)
+					love.graphics.draw(hbmViolet, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 			elseif (DrawTwelth == 1 and (c == (11 + key - stringOffset) or c == (11 + key - stringOffset + 12) or c == (11 + key - stringOffset - 12))) then
 				if (DrawMajMin == 1) then
-					love.graphics.draw(hbmViolet, c*48, i*48)
+					love.graphics.draw(hbmViolet, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				else
-					love.graphics.draw(hbmVioletRed, c*48, i*48)
+					love.graphics.draw(hbmVioletRed, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 			else
-				love.graphics.draw(hbmGray, c*48, i*48)			
+				love.graphics.draw(hbmGray, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 			end
 			
 			
 			if (stringOffset >= 0) then -- only draw these on active strings
 			-- draw root marker, but not under tonic due to transparency
 				if (root ~= key and (c == (root - stringOffset) or c == (root - stringOffset + 12) or c == (root - stringOffset - 12))) then
-					love.graphics.draw(hbmRoot, c*48, i*48)
+					love.graphics.draw(hbmRoot, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 	
 			--	draw tonic, instead of root marker if both are equal
 				if ((c == (key - stringOffset) or c == (key - stringOffset + 12) or c == (key - stringOffset - 12))) then
-					love.graphics.draw(hbmTonic, c*48, i*48)
+					love.graphics.draw(hbmTonic, c*BUTTONSIZE, i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 				end
 			end
 			
@@ -571,91 +578,95 @@ function love.draw()
 		
 		--Draw the transparent note text overlays 2 octaves each string
 		if (stringOffset >= 0) then
-			love.graphics.draw(hbmString		,-(48*stringOffset), i*48)
-			love.graphics.draw(hbmString		,-(48*stringOffset)+(48*12), i*48)	
+			love.graphics.draw(hbmString		,-(BUTTONSIZE*stringOffset), i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
+			love.graphics.draw(hbmString		,-(BUTTONSIZE*stringOffset)+(BUTTONSIZE*12), i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
 		end
 		
 		--Draw the per string tuning controls (I use math for readability even with no variables sometimes)
-		love.graphics.draw(hbmLeft		,(48*13), i*48)
-		love.graphics.draw(hbmRight		,(48*13), (i*48)+16)
-		love.graphics.draw(hbmOff		,(48*13), (i*48)+32)		
+		love.graphics.draw(hbmLeft		,(BUTTONSIZE*13), i*BUTTONSIZE, 0, IMAGESCALE, IMAGESCALE)
+		love.graphics.draw(hbmRight		,(BUTTONSIZE*13), (i*BUTTONSIZE)+BUTTONSIZE/3, 0, IMAGESCALE, IMAGESCALE)
+		love.graphics.draw(hbmOff		,(BUTTONSIZE*13), (i*BUTTONSIZE)+(BUTTONSIZE/3)*2, 0, IMAGESCALE, IMAGESCALE)		
 		
 	end -- VERTICAL LOOP (0 to 5 strings, i)
 	elseif (DialogWindow == 1) then
-		love.graphics.rectangle("fill", 0,0, 48*13,48*6)
+		love.graphics.rectangle("fill", 0,0, BUTTONSIZE*13,BUTTONSIZE*6)
 		love.graphics.setColor(.1, .1, .1)
 		love.graphics.setFont(font)
-		love.graphics.printf( "Rainbow Chord Board by Photonic2790@github.com", font, 10,10, 608, "center" )
-		love.graphics.printf( "This is a string instrument chord board calculator application, it highlights valid notes in the key a different colour based on numerical order, the starting view is C-Major on an E Standard tuned guitar. You can use it to learn chords and scales, teach transposing or simply help write new music. The fret board can be adjusted to look like many different instruments.", font, 10,30, 608, "left" )
+		love.graphics.printf( "Rainbow Chord Board by Photonic2790@github.com", font, 10,10, BUTTONSIZE*12.5, "center" )
+		love.graphics.printf( "This is a string instrument chord board calculator application, it highlights valid notes in the key a different colour based on numerical order, the starting view is C-Major on an E Standard tuned guitar. You can use it to learn chords and scales, teach transposing or simply help write new music. The fret board can be adjusted to look like many different instruments.", font, 10,30, BUTTONSIZE*12.5, "left" )
 		love.graphics.setColor(1, 1, 1)
 	elseif (DialogWindow == 2) then
-		love.graphics.rectangle("fill", 0,0, 48*13,48*6)
+		love.graphics.rectangle("fill", 0,0, BUTTONSIZE*13,BUTTONSIZE*6)
 		love.graphics.setColor(.1, .1, .1)
 		love.graphics.setFont(font)
-		love.graphics.printf( "How to use", font, 10,140, 608, "center" )
-		love.graphics.printf( "Click key up/down arrows to set the current key highlighted as red. Click Maj/Min to change between the two common interval step modes. The I ii iii... buttons will show the selected chord in that key. If a chord is selected the bottom row of special chord adjustment buttons work. The arrows and X along the right can adjust the tuning of a string. Click anywhere to begin.", font, 10,160, 608, "left" )
+		love.graphics.printf( "How to use", font, 10,10, BUTTONSIZE*12.5, "center" )
+		love.graphics.printf( "Click key up/down arrows to set the current key highlighted as red. Click Maj/Min to change between the two common interval step modes. The I ii iii... buttons will show the selected chord in that key. If a chord is selected the bottom row of special chord adjustment buttons work. The arrows and X along the right can adjust the tuning of a string. Click anywhere to begin.", font, 10,30, BUTTONSIZE*12.5, "left" )
 		love.graphics.setColor(1, 1, 1)
 	end -- if dialogwindow == 0
 	
 	-- the fret numbering graphic
-    love.graphics.draw(hbmFrets			, 0, 48*6)
+    love.graphics.draw(hbmFrets			, 0, BUTTONSIZE*6, 0, IMAGESCALE, IMAGESCALE)
 		
 	--Draw the key changing buttons
-	love.graphics.draw(hbmKeyLabel		, 0, 48*7)
-	love.graphics.draw(hbmUp			, 24, 48*7)
-	love.graphics.draw(hbmDown			, 24, 48*7.5)
+	love.graphics.draw(hbmKeyLabel		, 0, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	love.graphics.draw(hbmUp			, BUTTONSIZE/2, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	love.graphics.draw(hbmDown			, BUTTONSIZE/2, BUTTONSIZE*7.5, 0, IMAGESCALE, IMAGESCALE)
 	
 	-- Draw a row of each colour to use as buttons
-	love.graphics.draw(hbmRed 		    , 48*1 , 48*7)
-	love.graphics.draw(hbmRedOrange     , 48*2 , 48*7)
-	love.graphics.draw(hbmOrange 	    , 48*3 , 48*7)
+	love.graphics.draw(hbmRed 		    , BUTTONSIZE*1 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	love.graphics.draw(hbmRedOrange     , BUTTONSIZE*2 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	love.graphics.draw(hbmOrange 	    , BUTTONSIZE*3 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmOrangeYellow	, 48*4 , 48*7)
+		love.graphics.draw(hbmOrangeYellow	, BUTTONSIZE*4 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	else
-		love.graphics.draw(hbmYellow		, 48*4 , 48*7)
+		love.graphics.draw(hbmYellow		, BUTTONSIZE*4 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	end
 	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmYellow 		, 48*5 , 48*7)
+		love.graphics.draw(hbmYellow 		, BUTTONSIZE*5 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	else
-		love.graphics.draw(hbmYellowGreen   , 48*5 , 48*7)
+		love.graphics.draw(hbmYellowGreen   , BUTTONSIZE*5 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	end
-	love.graphics.draw(hbmGreen 	    , 48*6 , 48*7)
-	love.graphics.draw(hbmGreenBlue     , 48*7 , 48*7)
-	love.graphics.draw(hbmBlue 		    , 48*8 , 48*7)
+	love.graphics.draw(hbmGreen 	    , BUTTONSIZE*6 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	love.graphics.draw(hbmGreenBlue     , BUTTONSIZE*7 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	love.graphics.draw(hbmBlue 		    , BUTTONSIZE*8 , BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmBlueIndigo    , 48*9, 48*7)
+		love.graphics.draw(hbmBlueIndigo    , BUTTONSIZE*9, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	else
-		love.graphics.draw(hbmIndigo    	, 48*9, 48*7)
-	end
-	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmIndigo 	    , 48*10, 48*7)
-	else
-		love.graphics.draw(hbmIndigoViolet  , 48*10, 48*7)
+		love.graphics.draw(hbmIndigo    	, BUTTONSIZE*9, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	end
 	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmIndigoViolet  , 48*11, 48*7)
+		love.graphics.draw(hbmIndigo 	    , BUTTONSIZE*10, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	else
-		love.graphics.draw(hbmViolet 	    , 48*11, 48*7)
+		love.graphics.draw(hbmIndigoViolet  , BUTTONSIZE*10, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	end
 	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmViolet 	    , 48*12, 48*7)
+		love.graphics.draw(hbmIndigoViolet  , BUTTONSIZE*11, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	else
-		love.graphics.draw(hbmVioletRed	    , 48*12, 48*7)
+		love.graphics.draw(hbmViolet 	    , BUTTONSIZE*11, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	end
+	if (DrawMajMin == 1) then
+		love.graphics.draw(hbmViolet 	    , BUTTONSIZE*12, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
+	else
+		love.graphics.draw(hbmVioletRed	    , BUTTONSIZE*12, BUTTONSIZE*7, 0, IMAGESCALE, IMAGESCALE)
 	end
 	
 	-- draw the major or minor interval marker
 	if (DrawMajMin == 1) then
-		love.graphics.draw(hbmMajor 	    , 0, 48*8)
+		love.graphics.draw(hbmMajor 	    , 0, BUTTONSIZE*8, 0, IMAGESCALE, IMAGESCALE)
 	else
-		love.graphics.draw(hbmMinor 	    , 0, 48*8)
+		love.graphics.draw(hbmMinor 	    , 0, BUTTONSIZE*8, 0, IMAGESCALE, IMAGESCALE)
 	end
 				
 	-- drawing the preset buttons image at finally at the bottom of the screen
-	love.graphics.draw(hbmPresets 	    , 0, 48*9)
+	love.graphics.draw(hbmPresets 	    , 0, BUTTONSIZE*9, 0, IMAGESCALE, IMAGESCALE)
+
+	-- covers any overdrawn notes text (non 4:3 aspect ratio)
+	love.graphics.setColor(FGCOLOR)
+	love.graphics.rectangle("fill", BUTTONSIZE*13.3,0, width,height)
 	
     -- Draw the "cursor" at the mouse position.
-	-- if (love.mouse.isCursorSupported == false) then
-		love.graphics.draw(RCB_cursor, love.mouse.getX(), love.mouse.getY())
-	-- end
+	love.graphics.setColor(FGCOLOR)
+	love.graphics.draw(RCB_cursor, love.mouse.getX(), love.mouse.getY())
+
 end
 

@@ -17,10 +17,9 @@ source $controlfolder/control.txt
 
 get_controls
 
-GAMEDIR=/$directory/MUOS/application/rainbowchordboard
+GAMEDIR=/$directory/MUOS/application/RainbowChordBoard
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
-GPTOKEYB_CONFIG="./rainbowchordboard.gptk"
 if [[ "${DEVICE_NAME^^}" == *'RG35XX'*'SP'* ]] || [[ "${DEVICE_NAME^^}" == *'RG28XX'* ]]; then
     GPTOKEYB_CONFIG="./rainbowchordboard-nosticks.gptk"  
 else
